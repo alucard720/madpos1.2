@@ -2,7 +2,7 @@ import React from "react"
 import { useLocation, Link } from "react-router-dom"
 import { useAuth } from "../contexts/auth-context"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTruck, faCashRegister, faBars, faGifts, faSolarPanel, faCircleUser,faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons"
+import { faTruck, faCashRegister, faBars, faGifts, faSolarPanel, faCircleUser,faMoneyBillTrendUp,faUserGear } from "@fortawesome/free-solid-svg-icons"
 
 
 export function Sidebar() {
@@ -17,10 +17,10 @@ export function Sidebar() {
       </div>
 
       <NavItem
-        to="/"
+        to="/dashboard"
         icon={<FontAwesomeIcon icon={faCashRegister} size="2x" />}
         label="Vender"
-        isActive={pathname === "/"}
+        isActive={pathname === "/dashboard"}
         highlight
       />
 
@@ -58,6 +58,12 @@ export function Sidebar() {
         icon={<FontAwesomeIcon icon={faMoneyBillTrendUp} size="2x" />}
         label="Transacciones"
         isActive={pathname === "/transacciones"}
+      />
+        <NavItem
+        to="/userlayout"
+        icon={<FontAwesomeIcon icon={faUserGear} size="2x" />}
+        label="Configuraciones"
+        isActive={pathname === "/userlayout"}
       />
 {/* 
       <NavItem

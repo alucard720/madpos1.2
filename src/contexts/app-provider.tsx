@@ -1,6 +1,6 @@
 "use client"
 
-import type { ReactNode } from "react"
+import  { ReactNode } from "react"
 import { CartProvider } from "./cart-context"
 import { ProductProvider } from "./product-context"
 import { UserProvider } from "./user-context"

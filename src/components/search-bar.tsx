@@ -2,6 +2,10 @@
 
 import { useProducts } from "../contexts/product-context"
 import { useState } from "react"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faQrcode,faZap,faBars, faSearch, faChevronDown } from "@fortawesome/free-solid-svg-icons"
+
+
 
 export function SearchBar() {
   const { categories, searchQuery, setSearchQuery, selectedCategory, setSelectedCategory } = useProducts()
@@ -19,7 +23,7 @@ export function SearchBar() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <span className="input-group-text bg-white">
-            <i className="fas fa-search text-secondary"></i>
+            <i className="fas fa-search text-secondary"><FontAwesomeIcon icon={faSearch}/></i>
           </span>
         </div>
       </div>
@@ -31,7 +35,7 @@ export function SearchBar() {
             type="button"
           >
             <span>{selectedCategory || "Categorías"}</span>
-            <i className="fas fa-chevron-down small"></i>
+            <i><FontAwesomeIcon icon={faChevronDown}/></i>
           </button>
           <ul className={`dropdown-menu ${dropdownOpen ? "show" : ""}`}>
             <li>
@@ -63,17 +67,17 @@ export function SearchBar() {
       </div>
       <div className="col-auto">
         <button className="btn btn-outline-secondary">
-          <i className="fas fa-qrcode"></i>
+          <i><FontAwesomeIcon icon={faQrcode}/></i>
         </button>
       </div>
       <div className="col-auto">
         <button className="btn btn-outline-secondary">
-          <i className="fas fa-bolt"></i>
+          <i className="fas fa-bolt"><FontAwesomeIcon icon={faZap}/></i>
         </button>
       </div>
       <div className="col-auto">
         <button className="btn btn-outline-secondary">
-          <i className="fas fa-bars"></i>
+          <i className="fas fa-bars"><FontAwesomeIcon icon={faBars}/></i>
         </button>
       </div>
     </div>

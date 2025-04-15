@@ -9,8 +9,7 @@ import { SearchBar } from "../components/search-bar"
 export default function HomePage() {
   return (
     <div className="dashboard-container">
-        <Header title="Dashboard" />
-      {/* <SearchBar /> */}
+        <Header title="Dashboard" />     
       <div className="dashboard-content">
       <Sidebar/>
         <div className="products-container"> 

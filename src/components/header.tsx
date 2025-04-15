@@ -1,8 +1,10 @@
 "use client"
 
-import { useAuth } from "../contexts/auth-context"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { UserAuth } from "../contexts/userAuth"
 import { useUser } from "../contexts/user-context"
 import { useState } from "react"
+import { faChevronDown, faSignOut } from "@fortawesome/free-solid-svg-icons"
 
 type HeaderProps = {
   title: string
@@ -10,7 +12,7 @@ type HeaderProps = {
 
 export function Header({ title }: HeaderProps) {
   const { userProfile } = useUser()
-  const { logout } = useAuth()
+  const { logout } = UserAuth()
   const [showDropdown, setShowDropdown] = useState(false)
 
   return (
@@ -18,7 +20,7 @@ export function Header({ title }: HeaderProps) {
       <h1 className="fs-4 fw-bold text-dark mb-0">{title}</h1>
       <div className="d-flex align-items-center gap-3">
         <button className="btn btn-link text-decoration-none text-secondary">
-          <span className="small">Ayud</span>
+          <span className="small">Ayuda</span>
         </button>
         <div className="dropdown">
           <div
@@ -30,12 +32,12 @@ export function Header({ title }: HeaderProps) {
               <div className="fw-medium">{userProfile.name}</div>
               <div className="text-secondary small">{userProfile.email}</div>
             </div>
-            <i className="fas fa-chevron-down text-secondary small"></i>
+            <i><FontAwesomeIcon icon={faChevronDown}/></i>
           </div>
 
           <div className={`dropdown-menu dropdown-menu-end ${showDropdown ? "show" : ""}`}>
             <button className="dropdown-item d-flex align-items-center" onClick={logout}>
-              <i className="fas fa-sign-out-alt me-2"></i>
+              <i className="fas fa-sign-out-alt me-2"><FontAwesomeIcon icon={faSignOut}/></i>
               Cerrar sesión
             </button>
           </div>

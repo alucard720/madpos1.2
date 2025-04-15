@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router-dom"
 import { AppProvider } from "./contexts/app-provider"
 import Dashboard from "./pages/HomePage"
+import LoginPage from "./pages/CuentadeUsuario/LoginPage"
+import UserLayout from "./pages/CuentadeUsuario/userLayout"
 // import ProductsPage from "./pages/ProductsPage"
 // import OrdersPage from "./pages/OrdersPage"
 // import CatalogPage from "./pages/CatalogPage"
@@ -17,7 +19,9 @@ function App() {
     <AppProvider>
      
         <Routes>
-          <Route path="/" element={<Dashboard />} />
+          <Route path="/" element={<LoginPage/>} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/userlayout" element={<UserLayout />}/>         
           {/* <Route path="/productos" element={<ProductsPage />} />
           <Route path="/pedidos" element={<OrdersPage />} />
           <Route path="/catalogo" element={<CatalogPage />} />
