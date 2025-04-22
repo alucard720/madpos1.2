@@ -6,7 +6,7 @@ import { UserAuth } from "../../contexts/userAuth";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faEnvelope, faLock, faChevronRight} from "@fortawesome/free-solid-svg-icons";
-
+import axios from "axios";
 
 type SignupFormData = {
   email: string;
@@ -28,8 +28,19 @@ const LoginPage: React.FC = () => {
   });
 
   const onSubmit = (form: SignupFormData) => {
-    loginUser(form.email, form.password);
+    axios.post('http://localhost:8184/v1/auth/sign-in', {
+      "email": "admin@madtech.com.do",
+      "password": "123456@aM"
+  }).then((data) => {
+      console.log(data);
+
+    })
+
+
+    //loginUser(form.email, form.password);
+    
   };
+
 
   return (
     <div className="container">
@@ -42,7 +53,7 @@ const LoginPage: React.FC = () => {
             <div className="login__field">            
               <i className="login__icon "> <FontAwesomeIcon icon={faEnvelope} style={{color:"black"}}/>              
               </i>
-              <input
+              <input 
                 type="text"
                 className="login__input"
                 autoComplete="off"
@@ -66,7 +77,7 @@ const LoginPage: React.FC = () => {
               <span className="button__text">ENTRAR AHORA</span>
               <i className="button__icon fas fa-chevron-right"><FontAwesomeIcon icon={faChevronRight} style={{color:"grey"}}/>  </i>            
             </button>
-            <div className="screen_adv" style={{fontSize:"0.8rem"}}><p style={{color:"#1aae86", fontWeight:"bold"}}>No tienes Cuenta? <a href="/register" style={{color:"black"}}> Registrate Aqui!</a></p></div>
+            {/* <div className="screen_adv" style={{fontSize:"0.8rem"}}><p style={{color:"#1aae86", fontWeight:"bold"}}>No tienes Cuenta? <a href="/register" style={{color:"black"}}> Registrate Aqui!</a></p></div> */}
           </form>
           
           {/* <div className="social-login">

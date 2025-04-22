@@ -4,6 +4,8 @@ import type React from "react"
 
 import { useState } from "react"
 import { useAuth, type UserRole } from "../contexts/auth-context"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faSearch } from "@fortawesome/free-solid-svg-icons"
 
 // Mock users data
 const mockUsers = [
@@ -181,7 +183,7 @@ export function UserManagement({ compact = false }: UserManagementProps) {
         <div className="mb-4 position-relative">
           <div className="input-group">
             <span className="input-group-text bg-white">
-              <i className="fas fa-search"></i>
+              <i><FontAwesomeIcon icon={faSearch}/></i>
             </span>
             <input
               type="text"

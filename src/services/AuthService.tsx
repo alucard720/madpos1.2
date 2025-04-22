@@ -2,7 +2,7 @@ import axios from 'axios';
 import {handleError} from '../helpers/handleError';
 import { UserProfileToken } from '../Models/user';
 
-const api = "http://localhost:3000/"
+const api = "http://localhost:8184/"
 
 const axiosInstance = axios.create({
     baseURL: api,
@@ -15,13 +15,13 @@ const axiosInstance = axios.create({
 
 export const loginAPI = async(email: string, password: string)=>{
     try {
-        const response = await axios.post<UserProfileToken>( api + "userLogin", {
+        const response = await axios.post<UserProfileToken>( api + "v1/auth/sign-in", {
             email: email,
             password: password,
         });
         
         const {email :userEmail} = response.data;
-        const TokenCheck = await axios.get(`http://localhost:3000/tokens?email=${userEmail}`);
+        const TokenCheck = await axios.get(`http://localhost:8184/tokens?email=${userEmail}`);
 
         if(TokenCheck.data.length > 0){
             const userToken = TokenCheck.data[0].token;          
@@ -70,33 +70,33 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-export const registerAPI = async(userName: string, email: string, password: string)=>{
-    try {
-        const response = await axios.post<UserProfileToken>( api + "usersRegister", {
-            username: userName,
-            email,
-            password,
+// export const registerAPI = async(userName: string, email: string, password: string)=>{
+//     try {
+//         const response = await axios.post<UserProfileToken>( api + "usersRegister", {
+//             username: userName,
+//             email,
+//             password,
             
-        });
+//         });
        
-        const datawithToken = {
-            token: `fake-jwt-token-${Date.now()}`,
-            userName: response.data.userName,
-            email: response.data.email,
+//         const datawithToken = {
+//             token: `fake-jwt-token-${Date.now()}`,
+//             userName: response.data.userName,
+//             email: response.data.email,
             
-        };
+//         };
 
-        console.log("datawithToken:", datawithToken);
+//         console.log("datawithToken:", datawithToken);
 
-        await axiosInstance.post(api + "tokens",datawithToken);
-        return datawithToken;   
+//         await axiosInstance.post(api + "tokens",datawithToken);
+//         return datawithToken;   
        
 
-    }catch (error) {
-        handleError(error);
-        throw error;
-    }
+//     }catch (error) {
+//         handleError(error);
+//         throw error;
+//     }
 
-}
+// }
 
 export default axiosInstance;
