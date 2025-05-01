@@ -15,12 +15,12 @@ export function Header({ title }: HeaderProps) {
   const [showDropdown, setShowDropdown] = useState(false)
 
   const getInitials=(name: string) => {
-    return name
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase())
-      .join("")
-      .toUpperCase()
-      .substring(0, 2)
+    if(!name) return "??"
+    const names = name.split(" ")
+    if (names.length === 1) {
+      return names[0].charAt(0).toUpperCase()
+    }
+      
   }
 
 

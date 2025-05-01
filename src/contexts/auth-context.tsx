@@ -4,7 +4,12 @@ import { createContext, useContext, useState, useEffect, type ReactNode } from "
 import { useNavigate } from "react-router-dom"
 import { authenticateUser, createUser, type User as ApiUser } from "../services/user-service"
 
-type UserRole = "administrator" | "cashier" | "owner" 
+enum UserRole {
+  cajero = "cajero",
+    administrador = "administrador",
+    propietario = "propietario",
+}
+
 
 type User = {
   id: string
@@ -86,11 +91,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const newUser: ApiUser = {
       id: "temp-id", // Temporary id, replace with actual logic if needed
       username: name,
+      name, // Adding the 'name' property
       email,
       password,
-      role,
+      role: role,
       status: "active", // Assuming 'active' is a valid status
       lastLogin: new Date().toISOString(),
+      avatar: "", // Adding the 'avatar' property with a default value
     }
     const createdUser = await createUser(newUser)
     return !!createUser

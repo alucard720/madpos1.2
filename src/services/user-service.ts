@@ -1,18 +1,22 @@
 
-
+enum UserRole {
+    cajero = "cajero",
+    administrador = "administrador",
+    propietario = "propietario",
+}
 export type User = {
     name: string;
     id: string;
     username: string;
     email: string;
     password: string;
-    // role:UserRole;
+    role: UserRole // Replace with actual roles if different
     status: string;
     lastLogin: string;
     avatar: string;
 }
 
-const baseUrl = "http://localhost:8104/auth/api/user:id";
+const baseUrl = "http://localhost:8104/v1/users";
 
 //recoje todos los usuarios
 export async function fetchUsers(): Promise<User[]> {

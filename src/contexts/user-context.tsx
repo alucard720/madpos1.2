@@ -9,6 +9,7 @@ type UserContextType = {
     name: string
     email: string
     avatar: string
+    role?: string
   }
 }
 
@@ -17,9 +18,9 @@ const UserContext = createContext<UserContextType | undefined>(undefined)
 export function UserProvider({ children }: { children: ReactNode }) {
   const [customerName, setCustomerName] = useState("")
   const [userProfile] = useState({
-    name: "Miguel Santana",
-    email: "mg.santana35@gmail.com",
-    avatar: "MI",
+    name: "",
+    email: "",
+    avatar: "",
   })
 
   return (
