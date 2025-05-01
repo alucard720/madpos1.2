@@ -2,7 +2,6 @@
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { UserAuth } from "../contexts/userAuth"
-import { useUser } from "../contexts/user-context"
 import { useState } from "react"
 import { faChevronDown, faSignOut } from "@fortawesome/free-solid-svg-icons"
 
@@ -11,9 +10,19 @@ type HeaderProps = {
 }
 
 export function Header({ title }: HeaderProps) {
-  const { userProfile } = useUser()
-  const { logout } = UserAuth()
+
+  const { logout, user } = UserAuth()
   const [showDropdown, setShowDropdown] = useState(false)
+
+  const getInitials=(name: string) => {
+    return name
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase())
+      .join("")
+      .toUpperCase()
+      .substring(0, 2)
+  }
+
 
   return (
     <header className="bg-white shadow-sm p-3 d-flex justify-content-between align-items-center">
@@ -27,10 +36,14 @@ export function Header({ title }: HeaderProps) {
             className="d-flex align-items-center gap-2 cursor-pointer"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <div className="avatar">{userProfile.avatar}</div>
+            <div className="avatar">{user ? getInitials(user.name): "??"}</div>
             <div className="small">
-              <div className="fw-medium">{userProfile.name}</div>
-              <div className="text-secondary small">{userProfile.email}</div>
+              <div className="fw-medium">{user?.name}</div>
+              <div className="text-secondary small">{user?.email || ""}
+                {user &&(
+                  <span className="badge bg-secondary ms-1">{user.role === "administrator" ? "admin": "Cajero"}</span>
+                )}
+              </div>
             </div>
             <i><FontAwesomeIcon icon={faChevronDown}/></i>
           </div>

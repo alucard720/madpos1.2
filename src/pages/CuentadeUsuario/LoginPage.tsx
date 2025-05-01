@@ -6,11 +6,12 @@ import { UserAuth } from "../../contexts/userAuth";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {faEnvelope, faLock, faChevronRight} from "@fortawesome/free-solid-svg-icons";
-import axios from "axios";
+import { loginAPI } from "../../services/AuthService"; 
 
 type SignupFormData = {
   email: string;
   password: string;
+  accessToken?: string;
 };
 const signupSchema = Yup.object().shape({
   email: Yup.string().required("Correo Requerido").email("Correo invalido"),
@@ -27,18 +28,13 @@ const LoginPage: React.FC = () => {
     resolver: yupResolver(signupSchema),
   });
 
-  const onSubmit = (form: SignupFormData) => {
-    axios.post('http://localhost:8184/v1/auth/sign-in', {
-      "email": "admin@madtech.com.do",
-      "password": "123456@aM"
-  }).then((data) => {
-      console.log(data);
-
-    })
-
-
-    //loginUser(form.email, form.password);
-    
+  const onSubmit = async (form: SignupFormData) => {
+    try {
+      await loginAPI(form.email, form.password); // <-- just call loginAPI (no axios.post manually)
+      loginUser(form.email, form.password);      // <-- then update your context
+    } catch (error) {
+      console.error("Error during login:", error);
+    } 
   };
 
 

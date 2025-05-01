@@ -1,43 +1,46 @@
 import axios from 'axios';
 import {handleError} from '../helpers/handleError';
-import { UserProfileToken } from '../Models/user';
 
 const api = "http://localhost:8184/"
 
 const axiosInstance = axios.create({
     baseURL: api,
     withCredentials: true,
-    headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
+    headers:{Authorization: `Bearer ${localStorage.getItem("token")}`},
 });
 
 export const loginAPI = async(email: string, password: string)=>{
-    try {
-        const response = await axios.post<UserProfileToken>( api + "v1/auth/sign-in", {
-            email: email,
-            password: password,
-        });
-        
-        const {email :userEmail} = response.data;
-        const TokenCheck = await axios.get(`http://localhost:8184/tokens?email=${userEmail}`);
+     try {
+    const response = await axios.post(
+      api + "v1/auth/sign-in",
+      { email, password }
+    );
+    console.log("LoginAPi response:", response.data);
+    // Check if the response contains the access token and user data
+    const accessToken = response.data.accessToken || response.data.token || response.data.data?.accessToken;
+    const user = response.data.user || response.data.data?.user;
 
-        if(TokenCheck.data.length > 0){
-            const userToken = TokenCheck.data[0].token;          
-           console.log("Token:", userToken);
-            return userToken;
-        }else{
-            throw new Error("Token not found");
-        }
-    }catch (error) {
-        handleError(error);
-    }
+    if (!accessToken) {
+      throw new Error("No access token received from server");
+       }   
+
+    localStorage.setItem("token", accessToken);
+    if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
+    }  
+    
+    axiosInstance.defaults.headers.common["Authorization"] = `Bearer + ${accessToken}`;
+
+    return accessToken;
+  } catch (error) {
+    handleError(error);
+    throw error;
+  }
 };
 
 export const refreshTokenAPI = async()=>{
     try {
-       const response = await axiosInstance.post<{ accessToken: string }>(api + "refreshToken");
+       const response = await axiosInstance.post<{ accessToken: string }>(api + "v1/auth/refresh-token");
        return response.data.accessToken; 
         
     } catch (error) {
@@ -62,7 +65,7 @@ axiosInstance.interceptors.request.use(
             } catch (error) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("user");
-                window.location.href = "/login";
+                window.location.href = "/dashboard";
                 return Promise.reject(error);
             }
     }
@@ -70,33 +73,33 @@ axiosInstance.interceptors.request.use(
     }
 );
 
-// export const registerAPI = async(userName: string, email: string, password: string)=>{
-//     try {
-//         const response = await axios.post<UserProfileToken>( api + "usersRegister", {
-//             username: userName,
-//             email,
-//             password,
+export const registerAPI = async(userName: string, email: string, password: string)=>{
+    try {
+        const response = await axios.post( api + "usersRegister", {
+            username: userName,
+            email,
+            password,
             
-//         });
+        });
        
-//         const datawithToken = {
-//             token: `fake-jwt-token-${Date.now()}`,
-//             userName: response.data.userName,
-//             email: response.data.email,
+        const datawithToken = {
+            token: `fake-jwt-token-${Date.now()}`,
+            userName: response.data.userName,
+            email: response.data.email,
             
-//         };
+        };
 
-//         console.log("datawithToken:", datawithToken);
+        console.log("datawithToken:", datawithToken);
 
-//         await axiosInstance.post(api + "tokens",datawithToken);
-//         return datawithToken;   
+        await axiosInstance.post(api + "tokens",datawithToken);
+        return datawithToken;   
        
 
-//     }catch (error) {
-//         handleError(error);
-//         throw error;
-//     }
+    }catch (error) {
+        handleError(error);
+        throw error;
+    }
 
-// }
+}
 
 export default axiosInstance;

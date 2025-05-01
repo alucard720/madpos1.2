@@ -2,14 +2,16 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
+import { authenticateUser, createUser, type User as ApiUser } from "../services/user-service"
 
-type UserRole = "administrator" | "cashier"
+type UserRole = "administrator" | "cashier" | "owner" 
 
 type User = {
   id: string
   name: string
   email: string
   role: UserRole
+  lastLogin?: string
 }
 
 type AuthContextType = {
@@ -49,54 +51,55 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const login = async (email: string, password: string, role: UserRole): Promise<boolean> => {
+
     try {
       setIsLoading(true)
+      const apiUser = await authenticateUser(email, password)
+      
 
-      // In a real app, this would be an API call
-      // For demo purposes, we'll simulate a successful login with mock data
-      if (email && password) {
-        // Mock successful login
-        const mockUser = {
-          id: "user_123",
-          name: email.split("@")[0],
-          email: email,
+      if(apiUser){
+        const userData: User = {
+          id: apiUser.id,
+          name: apiUser.name,
+          email: apiUser.email,
           role: role,
         }
-
-        // Store user in localStorage
-        localStorage.setItem("user", JSON.stringify(mockUser))
-
-        // Store role in cookie for middleware
-        document.cookie = `user-role=${role}; path=/; max-age=86400`
-
-        setUser(mockUser)
+        setUser(userData)
+        localStorage.setItem("user", JSON.stringify(userData))
         return true
       }
-
-      return false
+      
     } catch (error) {
       console.error("Login failed:", error)
       return false
     } finally {
       setIsLoading(false)
     }
+
+    return false
   }
+ 
 
   const register = async (name: string, email: string, password: string, role: UserRole): Promise<boolean> => {
-    try {
-      // In a real app, this would be an API call
-      // For demo purposes, we'll simulate a successful registration
-      if (name && email && password) {
-        // This would typically create a user in the database
-        console.log("User registered:", { name, email, role })
-        return true
-      }
-
-      return false
-    } catch (error) {
-      console.error("Registration failed:", error)
-      return false
+   try {
+    setIsLoading(true)
+    const newUser: ApiUser = {
+      id: "temp-id", // Temporary id, replace with actual logic if needed
+      username: name,
+      email,
+      password,
+      role,
+      status: "active", // Assuming 'active' is a valid status
+      lastLogin: new Date().toISOString(),
     }
+    const createdUser = await createUser(newUser)
+    return !!createUser
+   } catch (error) {
+    console.error("Registration failed:", error)
+    return false
+   }finally {
+    setIsLoading(false)
+   }
   }
 
   const logout = () => {

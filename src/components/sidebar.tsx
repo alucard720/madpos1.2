@@ -62,7 +62,7 @@ export function Sidebar() {
         <NavItem
         to="/userlayout"
         icon={<FontAwesomeIcon icon={faUserGear} size="2x" />}
-        label="Configuraciones"
+        label="Usuarios"
         isActive={pathname === "/userlayout"}
       />
 {/* 
