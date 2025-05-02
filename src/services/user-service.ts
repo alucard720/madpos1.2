@@ -1,5 +1,5 @@
 
-enum UserRole {
+export enum UserRole {
     cajero = "cajero",
     administrador = "administrador",
     propietario = "propietario",
@@ -21,12 +21,19 @@ const baseUrl = "http://localhost:8104/v1/users";
 //recoje todos los usuarios
 export async function fetchUsers(): Promise<User[]> {
    try {
-    const response  = await fetch(baseUrl)
+    const token = localStorage.getItem('token');
+    const response  = await fetch(baseUrl,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        }
+    })
 
-    if (!response.ok) {
+    if (!response) {
         throw new Error('Network response was not ok');
     }
-    const data = await response.json();
+    const data = response.json();
     return data || [];      
    } catch (error) {
     console.error('Error fetching users:', error);

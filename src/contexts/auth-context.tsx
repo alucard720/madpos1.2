@@ -6,8 +6,8 @@ import { authenticateUser, createUser, type User as ApiUser } from "../services/
 
 enum UserRole {
   cajero = "cajero",
-    administrador = "administrador",
-    propietario = "propietario",
+  administrador = "administrador",
+  propietario = "propietario",
 }
 
 
